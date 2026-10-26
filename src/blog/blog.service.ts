@@ -1,43 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogDto } from './dtos/blog.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { Blog } from '../generated/prisma/client.js';
 @Injectable()
 export class BlogService {
-  private blogs = [
-    { _id: 1, title: 'title 1', content: 'content 1' },
-    { _id: 2, title: 'title 2', content: 'content 2' },
-    { _id: 3, title: 'title 3', content: 'content 3' },
-  ];
+  constructor(private readonly prismaService: PrismaService) {}
 
-  findAll() {
-    return this.blogs;
+  async findAll(): Promise<Blog[]> {
+    return await this.prismaService.blog.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
-  findOne(id: string) {
-    const blog = this.blogs.find((item) => item._id.toString() === id);
+  async findOne(id: string): Promise<Blog> {
+    const blog = await this.prismaService.blog.findUnique({
+      where: { id: id },
+    });
+
     if (blog) {
       return blog;
     } else {
-      throw new NotFoundException();
+      throw new NotFoundException(`Blog with id ${id} not found`);
     }
   }
 
-  create(body: BlogDto) {
-    const id = Math.random();
-    const newBlog = { ...body, _id: id };
-    this.blogs.push(newBlog);
-    return newBlog;
+  async create(body: BlogDto): Promise<Blog> {
+    return await this.prismaService.blog.create({ data: body });
   }
 
-  update(id: string, body: BlogDto) {
-    const blog = this.findOne(id);
-    blog.title = body.title;
-    blog.content = body.content;
-    return blog;
+  async update(id: string, body: BlogDto): Promise<Blog> {
+    return await this.prismaService.blog.update({
+      where: { id: id },
+      data: body,
+    });
   }
 
-  delete(id: string){
-    const blog = this.findOne(id)
-    const newBlogs = this.blogs.filter(item => item._id !== blog._id);
-    this.blogs = newBlogs;
+  async delete(id: string): Promise<Blog> {
+    return await this.prismaService.blog.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }

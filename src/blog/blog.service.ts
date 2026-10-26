@@ -38,6 +38,6 @@ export class BlogService {
   delete(id: string){
     const blog = this.findOne(id)
     const newBlogs = this.blogs.filter(item => item._id !== blog._id);
-    this.blogs = newBlogs; 
+    this.blogs = newBlogs;
   }
 }

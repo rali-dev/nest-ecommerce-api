@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { BlogDto } from './dtos/blog.dto';
+import { BlogQueryDto } from './dtos/blog-query.dto';
 import { BlogService } from './blog.service';
 
 @Controller('blog')
@@ -16,8 +17,8 @@ export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
   @Get()
-  findAll(@Query() queryParams) {
-    return this.blogService.findAll();
+  findAll(@Query() queryParams: BlogQueryDto) {
+    return this.blogService.findAll(queryParams);
   }
 
   @Get(':id')

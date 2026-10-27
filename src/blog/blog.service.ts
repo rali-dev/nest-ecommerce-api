@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogDto } from './dtos/blog.dto';
-import { BlogQueryDto, Sort } from './dtos/blog-query.dto';
+import { BlogQueryDto} from './dtos/blog-query.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Blog, Prisma } from '../generated/prisma/client.js';
 import { sortFunction } from '../shared/utils/sort-utils';

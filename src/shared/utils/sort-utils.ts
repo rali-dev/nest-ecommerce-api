@@ -1,5 +1,5 @@
 import { Prisma } from '../../generated/prisma/client.js';
-import { Sort } from '../../blog/dtos/blog-query.dto';
+import { Sort } from '../dtos/general-query.dto';
 
 export function sortFunction(sort?: Sort) {
   let orderBy: Prisma.BlogOrderByWithRelationInput = {};
@@ -8,7 +8,7 @@ export function sortFunction(sort?: Sort) {
   } else if (sort === Sort.UpdatedAt) {
     orderBy = { updatedAt: 'desc' };
   } else {
-    orderBy = { createdAt: 'asc' };
+    orderBy = { createdAt: 'desc' };
   }
   return orderBy;
 }

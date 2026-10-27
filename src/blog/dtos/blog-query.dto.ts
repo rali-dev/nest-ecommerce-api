@@ -1,4 +1,10 @@
-import { IsOptional, IsNumber, IsString, IsPositive } from 'class-validator';
+import { IsOptional, IsNumber, IsString, IsPositive, IsEnum } from 'class-validator';
+
+export enum Sort {
+  Title = 'title',
+  UpdatedAt = 'updatedAt',
+  CreatedAt = 'createdAt',
+}
 export class BlogQueryDto {
   @IsOptional()
   @IsNumber()
@@ -11,4 +17,7 @@ export class BlogQueryDto {
   @IsOptional()
   @IsString()
   title?: string;
+  @IsOptional()
+  @IsEnum(Sort)
+  sort?: Sort
 }

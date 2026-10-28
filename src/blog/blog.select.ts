@@ -6,3 +6,10 @@ export const defaultBlogSelect: Prisma.BlogSelect = {
   createdAt: true,
   updatedAt: true,
 };
+export const defaultBlogCategorySelect: Prisma.BlogCategorySelect = {
+  id: true,
+  title: true,
+  content: true,
+  createdAt: true,
+  updatedAt: true,
+};

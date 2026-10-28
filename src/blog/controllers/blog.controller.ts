@@ -8,9 +8,9 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { BlogDto } from './dtos/blog.dto';
-import { BlogQueryDto } from './dtos/blog-query.dto';
-import { BlogService } from './blog.service';
+import { BlogDto } from '../dtos/blog.dto';
+import { BlogQueryDto } from '../dtos/blog-query.dto';
+import { BlogService } from '../services/blog.service';
 
 @Controller('blog')
 export class BlogController {

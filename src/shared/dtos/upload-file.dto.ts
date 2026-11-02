@@ -11,4 +11,10 @@ export class UploadFileDto {
 
   @IsOptional()
   folder?: string;
+
+  @IsOptional()
+  height?: number;
+
+  @IsOptional()
+  width?: number;
 }

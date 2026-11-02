@@ -10,10 +10,14 @@ export const saveImage = async (
   const fileName =
     new Date().toISOString().replaceAll(':', '-').replaceAll('.', '-') +
     '-' +
-    file.originalname;
-  mkdirp.sync(destination);
+    file.originalname.split('.')[0] + '.webp';
+  mkdirp.sync(destination + '/main');
+  mkdirp.sync(destination + '/resized');
 
-  await sharp(file.buffer).toFile(destination + '/' + fileName);
+  await sharp(file.buffer).webp().toFile(destination + '/main/' + fileName);
+  await sharp(file.buffer).webp()
+    .resize({ height: body.height || 200, width: body.width || 200 })
+    .toFile(destination + '/resized/' + fileName);
 
   return fileName;
 };

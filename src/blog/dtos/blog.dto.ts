@@ -9,5 +9,8 @@ export class BlogDto {
   content: string;
   @IsString()
   @IsNotEmpty()
+  image: string;
+  @IsString()
+  @IsNotEmpty()
   categoryId: string;
 }

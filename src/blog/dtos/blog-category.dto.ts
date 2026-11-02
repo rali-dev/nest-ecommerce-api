@@ -1,9 +1,12 @@
-import { IsString, IsNotEmpty} from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 export class BlogCategoryDto {
   @IsString()
   @IsNotEmpty()
-  title : string
+  title: string;
   @IsString()
   @IsNotEmpty()
-  content: string
+  content: string;
+  @IsString()
+  @IsNotEmpty()
+  image: string;
 }

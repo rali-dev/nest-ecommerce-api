@@ -17,6 +17,7 @@ model Blog {
   id         String       @id @default(uuid())
   title      String
   content    String
+  image      String
   categoryId String
   category   BlogCategory @relation(fields: [categoryId], references: [id])
   createdAt  DateTime     @default(now())
@@ -27,6 +28,7 @@ model BlogCategory {
   id        String   @id @default(uuid())
   title     String
   content   String
+  image     String
   blogs     Blog[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

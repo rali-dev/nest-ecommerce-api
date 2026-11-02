@@ -4,15 +4,21 @@ import {
   Post,
   UseInterceptors,
   UploadedFile,
+  UploadedFiles,
   ParseFilePipe,
   MaxFileSizeValidator,
-  FileTypeValidator,
+  FileTypeValidator
 } from '@nestjs/common';
 import { UploadFileDto } from './shared/dtos/upload-file.dto';
+import { UploadFilesDto } from './shared/dtos/upload-files.dto';
 import { AppService } from './app.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiBody } from '@nestjs/swagger';
-import { saveImage } from './shared/utils/file-utils';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody, ApiTags } from '@nestjs/swagger';
+import { saveImage, saveImages } from './shared/utils/file-utils';
+
+
+
+@ApiTags('Shared')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -35,6 +41,17 @@ export class AppController {
     file: Express.Multer.File,
     @Body() body: UploadFileDto,
   ) {
-    return saveImage(file, body)
+    return saveImage(file, body);
+  }
+
+  @Post('upload-files')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UploadFilesDto })
+  @UseInterceptors(FilesInterceptor('files'))
+  uploadFiles(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() body: UploadFilesDto,
+  ) {
+    return saveImages(files, body);
   }
 }

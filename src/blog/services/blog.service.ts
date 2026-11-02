@@ -5,6 +5,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { Blog, Prisma } from '../../generated/prisma/client.js';
 import { sortFunction } from '../../shared/utils/sort-utils';
 import { defaultBlogSelect } from '../blog.select';
+import { deleteImage } from '../../shared/utils/file-utils';
 @Injectable()
 export class BlogService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -69,17 +70,31 @@ export class BlogService {
   }
 
   async update(id: string, body: BlogDto) {
-    return await this.prismaService.blog.update({
+    const blog = await this.findOne(id, { id: true, image: true });
+
+    const updatedBlog = await this.prismaService.blog.update({
       where: { id: id },
       data: body,
       select: { title: true, content: true },
     });
+
+    if (blog.image !== body.image) {
+      await deleteImage(blog.image, 'blog');
+    }
+
+    return updatedBlog;
   }
 
   async delete(id: string) {
-    return await this.prismaService.blog.delete({
+    const blog = await this.findOne(id, { id: true, image: true });
+
+    const deletedBlog = await this.prismaService.blog.delete({
       where: { id: id },
       select: { id: true },
     });
+
+    await deleteImage(blog.image, 'blog');
+
+    return deletedBlog;
   }
 }

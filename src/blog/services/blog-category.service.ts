@@ -5,6 +5,7 @@ import { sortFunction } from '../../shared/utils/sort-utils';
 import { Prisma, BlogCategory } from '../../generated/prisma/client.js';
 import { defaultBlogCategorySelect } from '../blog.select';
 import { BlogCategoryDto } from '../dtos/blog-category.dto';
+import { deleteImage } from '../../shared/utils/file-utils';
 @Injectable()
 export class BlogCategoryService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -57,17 +58,31 @@ export class BlogCategoryService {
   }
 
   async update(id: string, body: BlogCategoryDto) {
-    return await this.prismaService.blogCategory.update({
+    const blogCategory = await this.findOne(id, { id: true, image: true });
+
+    const updatedBlogCategory = await this.prismaService.blogCategory.update({
       where: { id: id },
       data: body,
       select: { title: true, content: true },
     });
+
+    if (blogCategory.image !== body.image) {
+      await deleteImage(blogCategory.image, 'blog-category');
+    }
+
+    return updatedBlogCategory;
   }
 
   async delete(id: string) {
-    return await this.prismaService.blogCategory.delete({
+    const blogCategory = await this.findOne(id, { id: true, image: true });
+
+    const deletedBlogCategory = await this.prismaService.blogCategory.delete({
       where: { id: id },
       select: { id: true },
     });
+
+    await deleteImage(blogCategory.image, 'blog-category');
+
+    return deletedBlogCategory;
   }
 }

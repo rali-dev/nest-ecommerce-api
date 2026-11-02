@@ -1,5 +1,6 @@
 import {
   Controller,
+  Body,
   Post,
   UseInterceptors,
   UploadedFile,
@@ -11,6 +12,7 @@ import { UploadFileDto } from './shared/dtos/upload-file.dto';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { saveImage } from './shared/utils/file-utils';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -25,13 +27,14 @@ export class AppController {
         validators: [
           new MaxFileSizeValidator({ maxSize: 20000000 }),
           new FileTypeValidator({
-            fileType: /(image\jpeg|image\/png|image\/jpg|image\/webp|image)/,
+            fileType: /(image\/jpeg|image\/png|image\/jpg|image\/webp)/,
           }),
         ],
       }),
     )
     file: Express.Multer.File,
+    @Body() body: UploadFileDto,
   ) {
-    console.log(file);
+    return saveImage(file, body)
   }
 }

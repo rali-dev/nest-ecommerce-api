@@ -6,6 +6,9 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { APP_FILTER } from '@nestjs/core';
+import { LogFilter } from './shared/filters/log.filter';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +22,12 @@ import { join } from 'path';
     BlogModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: LogFilter,
+    },
+  ],
 })
 export class AppModule {}

@@ -14,6 +14,8 @@ async function bootstrap() {
     }),
   );
 
+  //app.useGlobalFilters(new LogFilter());
+  
   const config = new DocumentBuilder()
     .setTitle('Nest Ecommerce Api')
     .setVersion('1.0')

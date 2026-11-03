@@ -5,10 +5,14 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { AppService } from '../../app.service';
+import { LogType } from '../../generated/prisma/client.js';
 
 @Catch(HttpException)
 export class LogFilter<T extends HttpException> implements ExceptionFilter {
-  catch(exception: T, host: ArgumentsHost) {
+  constructor(private readonly appService: AppService) {}
+
+  async catch(exception: T, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response>();
     const status = exception.getStatus();
 
@@ -19,6 +23,15 @@ export class LogFilter<T extends HttpException> implements ExceptionFilter {
       });
     } else {
       response.send(exception.getResponse());
+    }
+
+    try {
+      await this.appService.log({
+        type: LogType.Error,
+        content: JSON.stringify(exception.getResponse()),
+      });
+    } catch (error) {
+      console.error('Could not save log:', error);
     }
     console.log(exception);
   }

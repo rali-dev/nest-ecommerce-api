@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
@@ -14,8 +15,9 @@ async function bootstrap() {
     }),
   );
 
-  //app.useGlobalFilters(new LogFilter());
-  
+  // app.useGlobalFilters(new LogFilter());
+  // app.useGlobalGuards(new ApiKeyGuard());
+
   const config = new DocumentBuilder()
     .setTitle('Nest Ecommerce Api')
     .setVersion('1.0')

@@ -12,6 +12,10 @@ import { BlogDto } from '../dtos/blog.dto';
 import { BlogQueryDto } from '../dtos/blog-query.dto';
 import { BlogService } from '../services/blog.service';
 
+// @ApiHeader({
+//   name: 'apikey',
+//   description: 'API KEY',
+// })
 @Controller('blog')
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}

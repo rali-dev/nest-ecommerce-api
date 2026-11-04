@@ -35,6 +35,5 @@ export class LogFilter<T extends HttpException> implements ExceptionFilter {
     } catch (error) {
       console.error('Could not save log:', error);
     }
-    console.log(exception);
   }
 }

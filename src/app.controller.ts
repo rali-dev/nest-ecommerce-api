@@ -17,8 +17,7 @@ import { AppService } from './app.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiBody, ApiTags } from '@nestjs/swagger';
 import { saveImage, saveImages, deleteImage } from './shared/utils/file-utils';
-
-
+import { ImagesPipe } from './shared/pipes/images.pipe';
 
 @ApiTags('Shared')
 @Controller()
@@ -51,14 +50,14 @@ export class AppController {
   @ApiBody({ type: UploadFilesDto })
   @UseInterceptors(FilesInterceptor('files'))
   uploadFiles(
-    @UploadedFiles() files: Array<Express.Multer.File>,
+    @UploadedFiles(ImagesPipe) files: Array<Express.Multer.File>,
     @Body() body: UploadFilesDto,
   ) {
     return saveImages(files, body);
   }
 
   @Delete('delete-file')
-  deleteFile(@Body() body: DeleteFileDto){
+  deleteFile(@Body() body: DeleteFileDto) {
     return deleteImage(body.fileName, body.folder);
   }
 }

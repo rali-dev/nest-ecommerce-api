@@ -70,12 +70,11 @@ export class BlogService {
   }
 
   async update(id: string, body: BlogDto) {
-    const blog = await this.findOne(id, { id: true, image: true });
+    const blog = await this.findOne(id, { image: true });
 
     const updatedBlog = await this.prismaService.blog.update({
       where: { id: id },
       data: body,
-      select: { title: true, content: true },
     });
 
     if (blog.image !== body.image) {
@@ -86,11 +85,10 @@ export class BlogService {
   }
 
   async delete(id: string) {
-    const blog = await this.findOne(id, { id: true, image: true });
+    const blog = await this.findOne(id, { image: true });
 
     const deletedBlog = await this.prismaService.blog.delete({
       where: { id: id },
-      select: { id: true },
     });
 
     await deleteImage(blog.image, 'blog');

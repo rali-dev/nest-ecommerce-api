@@ -35,12 +35,17 @@ model BlogCategory {
 }
 
 enum LogType {
-  Error @map("error")
+  ERROR
+  POST
+  PUT
+  PATCH
+  DELETE
 }
 
 model Log {
   id        String   @id @default(uuid())
   content   String
+  url       String
   type      LogType
   createdAt DateTime @default(now())
 }

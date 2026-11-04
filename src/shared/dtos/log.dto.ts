@@ -7,6 +7,10 @@ export class LogDto {
   content: string;
 
   @IsNotEmpty()
+  @IsString()
+  url: string;
+
+  @IsNotEmpty()
   @IsEnum(LogType)
   type: LogType;
 }

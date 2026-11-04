@@ -6,8 +6,9 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LogFilter } from './shared/filters/log.filter';
+import { LogInterceptor } from './shared/interceptors/log.interceptor';
 
 @Module({
   imports: [
@@ -27,6 +28,10 @@ import { LogFilter } from './shared/filters/log.filter';
     {
       provide: APP_FILTER,
       useClass: LogFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LogInterceptor,
     },
   ],
 })

@@ -3,7 +3,7 @@ import { BlogDto } from '../dtos/blog.dto';
 import { BlogQueryDto } from '../dtos/blog-query.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Blog, Prisma } from '../../generated/prisma/client.js';
-import { sortFunction } from '../../shared/utils/sort-utils';
+import { blogSortFunction } from '../../shared/utils/sort-utils';
 import { defaultBlogSelect } from '../blog.select';
 import { deleteImage } from '../../shared/utils/file-utils';
 @Injectable()
@@ -22,7 +22,7 @@ export class BlogService {
       where.title = { contains: title, mode: 'insensitive' };
     }
 
-    const orderBy = sortFunction(sort);
+    const orderBy = blogSortFunction(sort);
 
     const blogs = await this.prismaService.blog.findMany({
       where,

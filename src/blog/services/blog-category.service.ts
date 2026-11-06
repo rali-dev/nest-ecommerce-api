@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BlogCategoryQueryDto } from '../dtos/blog-category-query.dto';
-import { sortFunction } from '../../shared/utils/sort-utils';
+import { blogCategorySortFunction } from '../../shared/utils/sort-utils';
 import { Prisma, BlogCategory } from '../../generated/prisma/client.js';
 import { defaultBlogCategorySelect } from '../blog.select';
 import { BlogCategoryDto } from '../dtos/blog-category.dto';
@@ -22,7 +22,7 @@ export class BlogCategoryService {
       where.title = { contains: title, mode: 'insensitive' };
     }
 
-    const orderBy = sortFunction(sort);
+    const orderBy = blogCategorySortFunction(sort);
 
     const blogCategories = await this.prismaService.blogCategory.findMany({
       where: where,

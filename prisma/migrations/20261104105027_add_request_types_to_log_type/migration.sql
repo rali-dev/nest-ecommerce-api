@@ -1,4 +1,4 @@
-feat(logs): save request responses in the database/*
+/*
   Warnings:
 
   - The values [error] on the enum `LogType` will be removed. If these variants are still used in the database, this will fail.

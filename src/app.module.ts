@@ -10,6 +10,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LogFilter } from './shared/filters/log.filter';
 import { LogInterceptor } from './shared/interceptors/log.interceptor';
 import { TimeMiddleware } from './shared/middlewares/time.middleware';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TimeMiddleware } from './shared/middlewares/time.middleware';
     }),
     PrismaModule,
     BlogModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

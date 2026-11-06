@@ -1,23 +1,24 @@
-import { IsOptional, IsNumber, IsString, IsPositive, IsEnum } from 'class-validator';
+import { IsOptional, IsPositive, IsInt } from 'class-validator';
 
-export enum Sort {
+export enum BlogSort {
   Title = 'title',
+  UpdatedAt = 'updatedAt',
+  CreatedAt = 'createdAt',
+}
+
+export enum UserSort {
+  LastName = 'lastName',
   UpdatedAt = 'updatedAt',
   CreatedAt = 'createdAt',
 }
 export class GeneralQueryDto {
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   @IsPositive()
   page?: number;
+  
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   @IsPositive()
   limit?: number;
-  @IsOptional()
-  @IsString()
-  title?: string;
-  @IsOptional()
-  @IsEnum(Sort)
-  sort?: Sort
 }

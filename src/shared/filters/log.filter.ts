@@ -23,7 +23,7 @@ export class LogFilter<T extends HttpException> implements ExceptionFilter {
         message: 'Die angeforderte Ressource wurde nicht gefunden.',
       });
     } else {
-      response.send(exception.getResponse());
+      response.status(status).send(exception.getResponse());
     }
 
     try {

@@ -1,11 +1,35 @@
 import { Prisma } from '../../generated/prisma/client.js';
-import { Sort } from '../dtos/general-query.dto';
+import { BlogSort, UserSort } from '../dtos/general-query.dto';
 
-export function sortFunction(sort?: Sort) {
+export function blogSortFunction(sort?: BlogSort) {
   let orderBy: Prisma.BlogOrderByWithRelationInput = {};
-  if (sort === Sort.Title) {
+  if (sort === BlogSort.Title) {
     orderBy = { title: 'asc' };
-  } else if (sort === Sort.UpdatedAt) {
+  } else if (sort === BlogSort.UpdatedAt) {
+    orderBy = { updatedAt: 'desc' };
+  } else {
+    orderBy = { createdAt: 'desc' };
+  }
+  return orderBy;
+}
+
+export function blogCategorySortFunction(sort?: BlogSort) {
+  let orderBy: Prisma.BlogCategoryOrderByWithRelationInput = {};
+  if (sort === BlogSort.Title) {
+    orderBy = { title: 'asc' };
+  } else if (sort === BlogSort.UpdatedAt) {
+    orderBy = { updatedAt: 'desc' };
+  } else {
+    orderBy = { createdAt: 'desc' };
+  }
+  return orderBy;
+}
+
+export function userSortFunction(sort?: UserSort) {
+  let orderBy: Prisma.UserOrderByWithRelationInput = {};
+  if (sort === UserSort.LastName) {
+    orderBy = { lastName: 'asc' };
+  } else if (sort === UserSort.UpdatedAt) {
     orderBy = { updatedAt: 'desc' };
   } else {
     orderBy = { createdAt: 'desc' };

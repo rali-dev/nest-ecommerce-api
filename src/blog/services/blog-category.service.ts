@@ -6,6 +6,7 @@ import { Prisma, BlogCategory } from '../../generated/prisma/client.js';
 import { defaultBlogCategorySelect } from '../blog.select';
 import { BlogCategoryDto } from '../dtos/blog-category.dto';
 import { deleteImage } from '../../shared/utils/file-utils';
+import { UpdateBlogCategoryDto } from '../dtos/update-blog-category.dto';
 @Injectable()
 export class BlogCategoryService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -57,7 +58,7 @@ export class BlogCategoryService {
     return await this.prismaService.blogCategory.create({ data: body });
   }
 
-  async update(id: string, body: BlogCategoryDto) {
+  async update(id: string, body: UpdateBlogCategoryDto) {
     const blogCategory = await this.findOne(id, { image: true });
 
     const updatedBlogCategory = await this.prismaService.blogCategory.update({
@@ -65,7 +66,7 @@ export class BlogCategoryService {
       data: body,
     });
 
-    if (blogCategory.image !== body.image) {
+    if (body?.image) {
       await deleteImage(blogCategory.image, 'blog-category');
     }
 

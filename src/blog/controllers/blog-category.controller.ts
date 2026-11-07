@@ -1,16 +1,17 @@
 import {
   Controller,
   Get,
-  Put,
   Delete,
   Post,
   Query,
   Param,
   Body,
+  Patch,
 } from '@nestjs/common';
 import { BlogCategoryService } from '../services/blog-category.service';
 import { BlogCategoryDto } from '../dtos/blog-category.dto';
 import { BlogCategoryQueryDto } from '../dtos/blog-category-query.dto';
+import { UpdateBlogCategoryDto } from '../dtos/update-blog-category.dto';
 @Controller('blog-category')
 export class BlogCategoryController {
   constructor(private readonly blogCategoryService: BlogCategoryService) {}
@@ -29,8 +30,8 @@ export class BlogCategoryController {
     return this.blogCategoryService.create(body);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() body: BlogCategoryDto) {
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() body: UpdateBlogCategoryDto) {
     return this.blogCategoryService.update(id, body);
   }
 

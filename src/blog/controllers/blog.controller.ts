@@ -4,13 +4,14 @@ import {
   Body,
   Param,
   Post,
-  Put,
   Delete,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { BlogDto } from '../dtos/blog.dto';
 import { BlogQueryDto } from '../dtos/blog-query.dto';
 import { BlogService } from '../services/blog.service';
+import { UpdateBlogDto } from '../dtos/update-blog.dto';
 
 // @ApiHeader({
 //   name: 'apikey',
@@ -35,8 +36,8 @@ export class BlogController {
     return this.blogService.create(body);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() body: BlogDto) {
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() body: UpdateBlogDto) {
     return this.blogService.update(id, body);
   }
 

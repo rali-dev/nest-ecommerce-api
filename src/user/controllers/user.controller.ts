@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,6 +16,7 @@ import { NamePipe } from '../../shared/pipes/name.pipe';
 import { GermanMobileNumberPipe } from '../../shared/pipes/german-mobile-number.pipe';
 import { PasswordPipe } from '../../shared/pipes/password.pipe';
 import { PasswordInterceptor } from '../../shared/interceptors/password.interceptor';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -37,11 +38,11 @@ export class UserController {
     return this.userService.create(body);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @UseInterceptors(PasswordInterceptor)
   update(
     @Param('id') id: string,
-    @Body(NamePipe, GermanMobileNumberPipe, PasswordPipe) body: UserDto,
+    @Body(NamePipe, GermanMobileNumberPipe, PasswordPipe) body: UpdateUserDto,
   ) {
     return this.userService.update(id, body);
   }

@@ -5,6 +5,7 @@ import { Prisma, User } from '../../generated/prisma/client';
 import { userSortFunction } from '../../shared/utils/sort-utils';
 import { UserDto } from '../dtos/user.dto';
 import { normalizeEmail } from '../../shared/utils/email-utils';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -59,14 +60,14 @@ export class UserService {
     });
   }
 
-  async update(id: string, body: UserDto) {
+  async update(id: string, body: UpdateUserDto) {
     await this.findOne(id);
 
     const user = await this.prismaService.user.update({
       where: { id: id },
       data: {
         ...body,
-        email: normalizeEmail(body.email),
+        email: body.email ? normalizeEmail(body.email) : undefined,
       },
     });
 

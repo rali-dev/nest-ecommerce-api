@@ -1,13 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  PipeTransform,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { UserDto } from '../../user/dtos/user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class PasswordPipe implements PipeTransform {
-  transform(user: UserDto) {
+  async transform(user: UserDto) {
     if (user?.password) {
       const passwordPattern =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s])\S{8,}$/;
@@ -17,6 +14,12 @@ export class PasswordPipe implements PipeTransform {
         throw new BadRequestException(
           'Password must be at least 8 characters long and include an uppercase English letter, a lowercase English letter, a number, and a special character. Whitespace is not allowed.',
         );
+      } else {
+        const password = user.password.trim();
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        return { ...user, password: hashedPassword };
       }
     }
     return user;

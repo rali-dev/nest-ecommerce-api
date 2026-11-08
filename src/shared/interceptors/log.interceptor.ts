@@ -18,7 +18,10 @@ export class LogInterceptor implements NestInterceptor {
       tap(async (response) => {
         if (request.method !== 'GET') {
           await this.appService.log({
-            content: JSON.stringify(response),
+            content:
+              response === undefined
+                ? 'No response body'
+                : JSON.stringify(response),
             url: request.url,
             type: LogType[request.method],
           });

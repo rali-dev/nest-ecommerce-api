@@ -27,6 +27,7 @@ export class UserController {
     return this.userService.findAll(queryParams);
   }
 
+  @UseInterceptors(PasswordInterceptor)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
@@ -34,7 +35,10 @@ export class UserController {
 
   @Post()
   @UseInterceptors(PasswordInterceptor)
-  create(@Body(NamePipe, GermanMobileNumberPipe, PasswordPipe) body: UserDto) {
+  create(
+    @Body(NamePipe, GermanMobileNumberPipe, new PasswordPipe(true))
+    body: UserDto,
+  ) {
     return this.userService.create(body);
   }
 
@@ -42,12 +46,14 @@ export class UserController {
   @UseInterceptors(PasswordInterceptor)
   update(
     @Param('id') id: string,
-    @Body(NamePipe, GermanMobileNumberPipe, PasswordPipe) body: UpdateUserDto,
+    @Body(NamePipe, GermanMobileNumberPipe, new PasswordPipe(true))
+    body: UpdateUserDto,
   ) {
     return this.userService.update(id, body);
   }
 
   @Delete(':id')
+  @UseInterceptors(PasswordInterceptor)
   delete(@Param('id') id: string) {
     return this.userService.delete(id);
   }

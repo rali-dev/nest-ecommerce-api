@@ -11,6 +11,7 @@ import { LogFilter } from './shared/filters/log.filter';
 import { LogInterceptor } from './shared/interceptors/log.interceptor';
 import { TimeMiddleware } from './shared/middlewares/time.middleware';
 import { UserModule } from './user/user.module';
+import { DuplicateFilter } from './shared/filters/duplicate.filter';
 
 @Module({
   imports: [
@@ -31,6 +32,10 @@ import { UserModule } from './user/user.module';
     {
       provide: APP_FILTER,
       useClass: LogFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: DuplicateFilter,
     },
     {
       provide: APP_INTERCEPTOR,

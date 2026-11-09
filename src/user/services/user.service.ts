@@ -13,10 +13,14 @@ import { UpdateUserDto } from '../dtos/update-user.dto';
 import { AuthDto } from '../dtos/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { SafeUserSelect, SafeUser } from '../user.select';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async findAll(
     queryParams: UserQueryDto,
@@ -113,7 +117,9 @@ export class UserService {
     if (!isPasswordCorrect) {
       throw new UnauthorizedException('Invalid credentials');
     } else {
-      console.log(body);
+      const payload = { sub: user.id };
+      const accessToken = this.jwtService.sign(payload);
+      return accessToken;
     }
   }
 }

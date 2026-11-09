@@ -12,6 +12,7 @@ import { LogInterceptor } from './shared/interceptors/log.interceptor';
 import { TimeMiddleware } from './shared/middlewares/time.middleware';
 import { UserModule } from './user/user.module';
 import { DuplicateFilter } from './shared/filters/duplicate.filter';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -21,6 +22,10 @@ import { DuplicateFilter } from './shared/filters/duplicate.filter';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'file'),
       serveRoot: '/file',
+    }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      global: true,
     }),
     PrismaModule,
     BlogModule,
@@ -43,8 +48,8 @@ import { DuplicateFilter } from './shared/filters/duplicate.filter';
     },
   ],
 })
-export class AppModule implements NestModule{
-  configure(consumer: MiddlewareConsumer){
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
     consumer.apply(TimeMiddleware).forRoutes('*');
   }
 }

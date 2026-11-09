@@ -9,18 +9,22 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UploadFileDto } from './shared/dtos/upload-file.dto';
 import { UploadFilesDto } from './shared/dtos/upload-files.dto';
 import { DeleteFileDto } from './shared/dtos/delete-file.dto';
 import { AppService } from './app.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiBody, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { saveImage, saveImages, deleteImage } from './shared/utils/file-utils';
 import { ImagesPipe } from './shared/pipes/images.pipe';
+import { JwtGuard } from './shared/guards/jwt.guard';
 
 @ApiTags('Shared')
 @Controller()
+@UseGuards(JwtGuard)
+@ApiBearerAuth()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 

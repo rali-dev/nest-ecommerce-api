@@ -7,17 +7,22 @@ import {
   Delete,
   Query,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogDto } from '../dtos/blog.dto';
 import { BlogQueryDto } from '../dtos/blog-query.dto';
 import { BlogService } from '../services/blog.service';
 import { UpdateBlogDto } from '../dtos/update-blog.dto';
+import { JwtGuard } from '../../shared/guards/jwt.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 // @ApiHeader({
 //   name: 'apikey',
 //   description: 'API KEY',
 // })
 @Controller('blog')
+@UseGuards(JwtGuard)
+@ApiBearerAuth()
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 

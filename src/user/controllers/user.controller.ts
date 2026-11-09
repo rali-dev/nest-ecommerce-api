@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UserQueryDto } from '../dtos/user-query.dto';
@@ -17,8 +18,12 @@ import { GermanMobileNumberPipe } from '../../shared/pipes/german-mobile-number.
 import { PasswordPipe } from '../../shared/pipes/password.pipe';
 import { PasswordInterceptor } from '../../shared/interceptors/password.interceptor';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtGuard } from '../../shared/guards/jwt.guard';
 
 @Controller('user')
+@UseGuards(JwtGuard)
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

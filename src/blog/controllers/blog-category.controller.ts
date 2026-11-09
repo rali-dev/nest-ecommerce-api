@@ -7,12 +7,17 @@ import {
   Param,
   Body,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogCategoryService } from '../services/blog-category.service';
 import { BlogCategoryDto } from '../dtos/blog-category.dto';
 import { BlogCategoryQueryDto } from '../dtos/blog-category-query.dto';
 import { UpdateBlogCategoryDto } from '../dtos/update-blog-category.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtGuard } from '../../shared/guards/jwt.guard';
 @Controller('blog-category')
+@UseGuards(JwtGuard)
+@ApiBearerAuth()
 export class BlogCategoryController {
   constructor(private readonly blogCategoryService: BlogCategoryService) {}
   @Get()

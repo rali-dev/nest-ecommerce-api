@@ -20,6 +20,8 @@ model Blog {
   image      String
   categoryId String
   category   BlogCategory @relation(fields: [categoryId], references: [id])
+  userId    String 
+  user      User          @relation(fields: [userId], references: [id])
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
 }
@@ -47,6 +49,8 @@ model Log {
   content   String
   url       String
   type      LogType
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
 }
 
@@ -57,6 +61,8 @@ model User {
   mobile    String
   email     String   @unique
   password  String
+  logs      Log[]
+  blogs     Blog[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

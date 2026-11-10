@@ -4,8 +4,16 @@ export class BlogQueryDto extends GeneralQueryDto {
   @IsOptional()
   @IsString()
   title?: string;
-  
+
   @IsOptional()
   @IsEnum(BlogSort)
   sort?: BlogSort;
+
+  @IsOptional()
+  @IsString()
+  userId?: string;
+
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
 }

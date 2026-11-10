@@ -15,6 +15,7 @@ import { BlogService } from '../services/blog.service';
 import { UpdateBlogDto } from '../dtos/update-blog.dto';
 import { JwtGuard } from '../../shared/guards/jwt.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { UserId } from '../../shared/decorators/user.decorator';
 
 // @ApiHeader({
 //   name: 'apikey',
@@ -37,8 +38,8 @@ export class BlogController {
   }
 
   @Post()
-  create(@Body() body: BlogDto) {
-    return this.blogService.create(body);
+  create(@Body() body: BlogDto, @UserId() userId: string) {
+    return this.blogService.create(body, userId);
   }
 
   @Patch(':id')

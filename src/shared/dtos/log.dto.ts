@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
 import { LogType } from '../../generated/prisma/client.js';
 
 export class LogDto {
@@ -13,4 +13,8 @@ export class LogDto {
   @IsNotEmpty()
   @IsEnum(LogType)
   type: LogType;
+
+  @IsOptional()
+  @IsString()
+  userId?: string;
 }

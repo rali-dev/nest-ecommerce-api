@@ -15,12 +15,25 @@ export class BlogService {
     queryParams: BlogQueryDto,
     select: Prisma.BlogSelect = defaultBlogSelect,
   ): Promise<{ blogs: Blog[]; count: number }> {
-    const { page = 1, limit = 5, title, sort } = queryParams;
+    const {
+      page = 1,
+      limit = 5,
+      title,
+      sort,
+      userId,
+      categoryId,
+    } = queryParams;
 
     const where: Prisma.BlogWhereInput = {};
 
     if (title) {
       where.title = { contains: title, mode: 'insensitive' };
+    }
+    if (userId) {
+      where.userId = userId;
+    }
+    if (categoryId) {
+      where.categoryId = categoryId;
     }
 
     const orderBy = blogSortFunction(sort);
@@ -66,8 +79,10 @@ export class BlogService {
     }
   }
 
-  async create(body: BlogDto): Promise<Blog> {
-    return await this.prismaService.blog.create({ data: body });
+  async create(body: BlogDto, userId: string): Promise<Blog> {
+    return await this.prismaService.blog.create({
+      data: { ...body, userId },
+    });
   }
 
   async update(id: string, body: UpdateBlogDto) {

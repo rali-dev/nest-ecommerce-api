@@ -14,6 +14,8 @@ import { AuthDto } from '../dtos/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { SafeUserSelect, SafeUser } from '../user.select';
 import { JwtService } from '@nestjs/jwt';
+import { randomInt } from 'node:crypto';
+import { ConfirmDto } from '../dtos/confirm.dto';
 
 @Injectable()
 export class UserService {
@@ -117,9 +119,48 @@ export class UserService {
     if (!isPasswordCorrect) {
       throw new UnauthorizedException('Invalid credentials');
     } else {
+      await this.sendConfirmationCode(email);
+    }
+  }
+
+  async confirm(body: ConfirmDto) {
+    const { email, twoFactorCode } = body;
+    const user = await this.findOneByEmail(email);
+    if (!user || !user.twoFactorCode) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isTwoFactorCodeCorrect = await bcrypt.compare(
+      twoFactorCode,
+      user.twoFactorCode,
+    );
+    if (!isTwoFactorCodeCorrect) {
+      throw new UnauthorizedException('Invalid two factor code');
+    } else {
       const payload = { sub: user.id };
       const accessToken = this.jwtService.sign(payload);
       return accessToken;
     }
+  }
+
+  async sendConfirmationCode(email: string) {
+    const user = await this.findOneByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const twoFactorCode = randomInt(100000, 1000000).toString(); // 6 digits
+    const salt = await bcrypt.genSalt();
+    const hashedCode = await bcrypt.hash(twoFactorCode, salt);
+
+    user.twoFactorCode = hashedCode;
+
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: { twoFactorCode: hashedCode },
+    });
+
+    // TODO: send the code by email with nodemailer instead
+    console.log(twoFactorCode);
   }
 }

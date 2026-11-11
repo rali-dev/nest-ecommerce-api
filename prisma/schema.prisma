@@ -20,8 +20,8 @@ model Blog {
   image      String
   categoryId String
   category   BlogCategory @relation(fields: [categoryId], references: [id])
-  userId    String 
-  user      User          @relation(fields: [userId], references: [id])
+  userId     String
+  user       User         @relation(fields: [userId], references: [id])
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
 }
@@ -55,14 +55,15 @@ model Log {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  firstName String
-  lastName  String
-  mobile    String
-  email     String   @unique
-  password  String
-  logs      Log[]
-  blogs     Blog[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  firstName     String
+  lastName      String
+  mobile        String
+  email         String   @unique
+  password      String
+  logs          Log[]
+  blogs         Blog[]
+  twoFactorCode String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

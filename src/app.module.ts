@@ -6,13 +6,14 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LogFilter } from './shared/filters/log.filter';
 import { LogInterceptor } from './shared/interceptors/log.interceptor';
 import { TimeMiddleware } from './shared/middlewares/time.middleware';
 import { UserModule } from './user/user.module';
 import { DuplicateFilter } from './shared/filters/duplicate.filter';
 import { JwtModule } from '@nestjs/jwt';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -27,6 +28,12 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET,
       global: true,
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 30,
+      },
+    ]),
     PrismaModule,
     BlogModule,
     UserModule,
@@ -46,6 +53,10 @@ import { JwtModule } from '@nestjs/jwt';
       provide: APP_INTERCEPTOR,
       useClass: LogInterceptor,
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    }
   ],
 })
 export class AppModule implements NestModule {

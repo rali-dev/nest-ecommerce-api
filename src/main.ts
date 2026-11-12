@@ -3,9 +3,13 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { IdPipe } from './shared/pipes/id.pipe';
+import helmet from 'helmet';
+import csrf from 'als-csrf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet());
+  app.use(csrf());
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({

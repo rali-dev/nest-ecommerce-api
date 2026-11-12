@@ -137,7 +137,7 @@ export class UserService {
     if (!isTwoFactorCodeCorrect) {
       throw new UnauthorizedException('Invalid two factor code');
     } else {
-      const payload = { sub: user.id };
+      const payload = { sub: user.id, role: user.role};
       const accessToken = this.jwtService.sign(payload);
       return accessToken;
     }

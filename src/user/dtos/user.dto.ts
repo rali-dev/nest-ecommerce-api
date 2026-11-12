@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
 import { normalizeEmail } from '../../shared/utils/email-utils';
-import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
+import { Role } from '../../generated/prisma/enums';
 
 export class UserDto {
   @IsString()
@@ -26,4 +27,8 @@ export class UserDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsNotEmpty()
+  @IsEnum(Role)
+  role: Role;
 }

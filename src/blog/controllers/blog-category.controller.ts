@@ -15,8 +15,10 @@ import { BlogCategoryQueryDto } from '../dtos/blog-category-query.dto';
 import { UpdateBlogCategoryDto } from '../dtos/update-blog-category.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtGuard } from '../../shared/guards/jwt.guard';
+import { RoleGuard } from '../../shared/guards/role.guard';
+import { Role } from '../../generated/prisma/client.js';
 @Controller('blog-category')
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, new RoleGuard([Role.ADMIN, Role.COPYWRITER]))
 @ApiBearerAuth()
 export class BlogCategoryController {
   constructor(private readonly blogCategoryService: BlogCategoryService) {}

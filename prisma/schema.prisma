@@ -54,6 +54,12 @@ model Log {
   createdAt DateTime @default(now())
 }
 
+enum Role {
+  ADMIN
+  USER
+  COPYWRITER
+}
+
 model User {
   id            String   @id @default(uuid())
   firstName     String
@@ -61,6 +67,7 @@ model User {
   mobile        String
   email         String   @unique
   password      String
+  role          Role     @default(USER)
   logs          Log[]
   blogs         Blog[]
   twoFactorCode String?

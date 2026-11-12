@@ -16,13 +16,15 @@ import { UpdateBlogDto } from '../dtos/update-blog.dto';
 import { JwtGuard } from '../../shared/guards/jwt.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserId } from '../../shared/decorators/user.decorator';
+import { RoleGuard } from '../../shared/guards/role.guard';
+import { Role } from '../../generated/prisma/client.js';
 
 // @ApiHeader({
 //   name: 'apikey',
 //   description: 'API KEY',
 // })
 @Controller('blog')
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, new RoleGuard([Role.ADMIN, Role.COPYWRITER]))
 @ApiBearerAuth()
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}

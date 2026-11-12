@@ -24,7 +24,7 @@ export class LogInterceptor implements NestInterceptor {
                 : JSON.stringify(response),
             url: request.url,
             type: LogType[request.method],
-            userId: request['userId'] || null,
+            userId: request['user']?.id || null,
           });
         }
       }),

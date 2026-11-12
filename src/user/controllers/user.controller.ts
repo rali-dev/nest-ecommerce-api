@@ -20,9 +20,11 @@ import { PasswordInterceptor } from '../../shared/interceptors/password.intercep
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtGuard } from '../../shared/guards/jwt.guard';
+import { RoleGuard } from '../../shared/guards/role.guard';
+import { Role } from '../../generated/prisma/client.js';
 
 @Controller('user')
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, new RoleGuard([Role.ADMIN]))
 @ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}

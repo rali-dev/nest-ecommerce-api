@@ -10,8 +10,7 @@ export class DuplicateFilter extends BaseExceptionFilter {
   }
   catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
     if (exception.code === 'P2002') {
-
-      console.dir(exception.meta, {depth:null});
+      console.dir(exception.meta, { depth: null });
       const response = host.switchToHttp().getResponse<Response>();
       const driverError = exception.meta?.driverAdapterError;
 
@@ -34,10 +33,14 @@ export class DuplicateFilter extends BaseExceptionFilter {
           ? constraint.index
           : undefined;
 
+      const DUPLICATE_FIELDS: Record<string, string> = {
+        User_email_key: 'email',
+        Blog_url_key: 'url',
+        BlogCategory_url_key: 'url',
+      };
+
       const duplicatedField =
-        exception.meta?.modelName === 'User' && index === 'User_email_key'
-          ? 'email'
-          : undefined;
+        typeof index === 'string' ? DUPLICATE_FIELDS[index] : undefined;
 
       response.status(409).json({
         statusCode: 409,

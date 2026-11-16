@@ -16,4 +16,8 @@ export class BlogQueryDto extends GeneralQueryDto {
   @IsOptional()
   @IsString()
   categoryId?: string;
+  
+  @IsOptional()
+  @IsString()
+  url?: string;
 }

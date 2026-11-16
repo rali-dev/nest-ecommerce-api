@@ -18,6 +18,7 @@ model Blog {
   title      String
   content    String
   image      String
+  url        String       @unique
   categoryId String
   category   BlogCategory @relation(fields: [categoryId], references: [id])
   userId     String
@@ -31,6 +32,7 @@ model BlogCategory {
   title     String
   content   String
   image     String
+  url       String   @unique
   blogs     Blog[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -15,12 +15,15 @@ export class BlogCategoryService {
     queryParams: BlogCategoryQueryDto,
     select: Prisma.BlogCategorySelect = defaultBlogCategorySelect,
   ): Promise<{ blogCategories: BlogCategory[]; count: number }> {
-    const { page = 1, limit = 5, title, sort } = queryParams;
+    const { page = 1, limit = 5, title, sort, url } = queryParams;
 
     const where: Prisma.BlogCategoryWhereInput = {};
 
     if (title) {
       where.title = { contains: title, mode: 'insensitive' };
+    }
+    if(url){
+      where.url = { contains: url, mode: 'insensitive' };
     }
 
     const orderBy = blogCategorySortFunction(sort);

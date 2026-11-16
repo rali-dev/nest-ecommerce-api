@@ -8,4 +8,8 @@ export class BlogCategoryQueryDto extends GeneralQueryDto {
   @IsOptional()
   @IsEnum(BlogSort)
   sort?: BlogSort;
+
+  @IsOptional()
+  @IsString()
+  url?: string;
 }

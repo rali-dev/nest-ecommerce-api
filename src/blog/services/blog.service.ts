@@ -21,6 +21,7 @@ export class BlogService {
       title,
       sort,
       userId,
+      url,
       categoryId,
     } = queryParams;
 
@@ -35,7 +36,9 @@ export class BlogService {
     if (categoryId) {
       where.categoryId = categoryId;
     }
-
+    if(url){
+      where.url = { contains: url, mode: 'insensitive' };
+    }
     const orderBy = blogSortFunction(sort);
 
     const blogs = await this.prismaService.blog.findMany({

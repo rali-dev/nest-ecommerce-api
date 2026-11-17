@@ -18,6 +18,8 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserId } from '../../shared/decorators/user.decorator';
 import { RoleGuard } from '../../shared/guards/role.guard';
 import { Role } from '../../generated/prisma/client.js';
+import { UrlPipe } from '../../shared/pipes/url.pipe';
+
 
 // @ApiHeader({
 //   name: 'apikey',
@@ -40,12 +42,12 @@ export class BlogController {
   }
 
   @Post()
-  create(@Body() body: BlogDto, @UserId() userId: string) {
+  create(@Body(UrlPipe) body: BlogDto, @UserId() userId: string) {
     return this.blogService.create(body, userId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: UpdateBlogDto) {
+  update(@Param('id') id: string, @Body(UrlPipe) body: UpdateBlogDto) {
     return this.blogService.update(id, body);
   }
 

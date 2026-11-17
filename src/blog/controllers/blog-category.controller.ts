@@ -17,6 +17,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtGuard } from '../../shared/guards/jwt.guard';
 import { RoleGuard } from '../../shared/guards/role.guard';
 import { Role } from '../../generated/prisma/client.js';
+import { UrlPipe } from '../../shared/pipes/url.pipe';
 @Controller('blog-category')
 @UseGuards(JwtGuard, new RoleGuard([Role.ADMIN, Role.COPYWRITER]))
 @ApiBearerAuth()
@@ -33,12 +34,12 @@ export class BlogCategoryController {
   }
 
   @Post()
-  async create(@Body() body: BlogCategoryDto) {
+  async create(@Body(UrlPipe) body: BlogCategoryDto) {
     return this.blogCategoryService.create(body);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: UpdateBlogCategoryDto) {
+  update(@Param('id') id: string, @Body(UrlPipe) body: UpdateBlogCategoryDto) {
     return this.blogCategoryService.update(id, body);
   }
 

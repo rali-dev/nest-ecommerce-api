@@ -3,7 +3,10 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { BlogCategoryQueryDto } from '../dtos/blog-category-query.dto';
 import { blogCategorySortFunction } from '../../shared/utils/sort-utils';
 import { Prisma, BlogCategory } from '../../generated/prisma/client.js';
-import { defaultBlogCategorySelect } from '../blog.select';
+import {
+  defaultBlogCategorySelect,
+  publicBlogCategoryDetailSelect,
+} from '../blog.select';
 import { BlogCategoryDto } from '../dtos/blog-category.dto';
 import { deleteImage } from '../../shared/utils/file-utils';
 import { UpdateBlogCategoryDto } from '../dtos/update-blog-category.dto';
@@ -22,7 +25,7 @@ export class BlogCategoryService {
     if (title) {
       where.title = { contains: title, mode: 'insensitive' };
     }
-    if(url){
+    if (url) {
       where.url = { contains: url, mode: 'insensitive' };
     }
 
@@ -86,5 +89,21 @@ export class BlogCategoryService {
     await deleteImage(blogCategory.image, 'blog-category');
 
     return deletedBlogCategory;
+  }
+
+  async findOneWithUrl(
+    url: string,
+    select: Prisma.BlogCategorySelect = publicBlogCategoryDetailSelect,
+  ) {
+    const blogCategory = await this.prismaService.blogCategory.findUnique({
+      where: { url: url },
+      select: select,
+    });
+
+    if (blogCategory) {
+      return blogCategory;
+    } else {
+      throw new NotFoundException(`Blog category with url ${url} not found`);
+    }
   }
 }

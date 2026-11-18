@@ -1,15 +1,42 @@
 import { Prisma } from '../generated/prisma/client.js';
-export const defaultBlogSelect: Prisma.BlogSelect = {
+export const defaultBlogSelect = {
   id: true,
   title: true,
   content: true,
+  image: true,
+  url: true,
   createdAt: true,
   updatedAt: true,
-};
-export const defaultBlogCategorySelect: Prisma.BlogCategorySelect = {
+} satisfies Prisma.BlogSelect;
+
+export const defaultBlogCategorySelect = {
   id: true,
   title: true,
   content: true,
+  image: true,
+  url: true,
   createdAt: true,
   updatedAt: true,
-};
+} satisfies Prisma.BlogCategorySelect;
+
+export const publicBlogCategorySelect = {
+  id: true,
+  title: true,
+  url: true,
+  image: true,
+} satisfies Prisma.BlogCategorySelect;
+
+export const publicBlogCategoryDetailSelect = {
+  id: true,
+  title: true,
+  content: true,
+  url: true,
+  image: true,
+} satisfies Prisma.BlogCategorySelect;
+
+export const publicBlogSelect = {
+  id: true,
+  title: true,
+  image: true,
+  url: true,
+} satisfies Prisma.BlogSelect;

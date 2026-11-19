@@ -27,11 +27,8 @@ export const publicBlogCategorySelect = {
 } satisfies Prisma.BlogCategorySelect;
 
 export const publicBlogCategoryDetailSelect = {
-  id: true,
-  title: true,
+  ...publicBlogCategorySelect,
   content: true,
-  url: true,
-  image: true,
 } satisfies Prisma.BlogCategorySelect;
 
 export const publicBlogSelect = {
@@ -39,4 +36,10 @@ export const publicBlogSelect = {
   title: true,
   image: true,
   url: true,
+} satisfies Prisma.BlogSelect;
+
+export const publicBlogDetailSelect = {
+  ...defaultBlogSelect,
+  content: true,
+  categoryId: true,
 } satisfies Prisma.BlogSelect;

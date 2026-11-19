@@ -35,4 +35,19 @@ export class SiteBlogController {
     );
     return { category, blogs, count };
   }
+
+  @Get(':url')
+  async findBlog(@Param('url') url: string) {
+    const blog = await this.blogService.findOneWithUrl(url);
+
+    const relatedBlogs = await this.blogService.findAll(
+      {
+        categoryId: blog.categoryId,
+        exclude: [blog.id],
+      },
+      publicBlogSelect,
+    );
+
+    return { blog, relatedBlogs };
+  }
 }

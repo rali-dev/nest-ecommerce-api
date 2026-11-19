@@ -4,7 +4,7 @@ import { BlogQueryDto } from '../dtos/blog-query.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Blog, Prisma } from '../../generated/prisma/client.js';
 import { blogSortFunction } from '../../shared/utils/sort-utils';
-import { defaultBlogSelect } from '../blog.select';
+import { defaultBlogSelect, publicBlogDetailSelect } from '../blog.select';
 import { deleteImage } from '../../shared/utils/file-utils';
 import { UpdateBlogDto } from '../dtos/update-blog.dto';
 @Injectable()
@@ -23,6 +23,7 @@ export class BlogService {
       userId,
       url,
       categoryId,
+      exclude,
     } = queryParams;
 
     const where: Prisma.BlogWhereInput = {};
@@ -36,9 +37,13 @@ export class BlogService {
     if (categoryId) {
       where.categoryId = categoryId;
     }
-    if(url){
+    if (url) {
       where.url = { contains: url, mode: 'insensitive' };
     }
+    if (exclude?.length) {
+      where.id = { notIn: exclude };
+    }
+
     const orderBy = blogSortFunction(sort);
 
     const blogs = await this.prismaService.blog.findMany({
@@ -113,5 +118,21 @@ export class BlogService {
     await deleteImage(blog.image, 'blog');
 
     return deletedBlog;
+  }
+
+  async findOneWithUrl(
+    url: string,
+    select: Prisma.BlogSelect = publicBlogDetailSelect,
+  ): Promise<Blog> {
+    const blog = await this.prismaService.blog.findUnique({
+      where: { url: url },
+      select,
+    });
+
+    if (blog) {
+      return blog;
+    } else {
+      throw new NotFoundException(`Blog with url ${url} not found`);
+    }
   }
 }

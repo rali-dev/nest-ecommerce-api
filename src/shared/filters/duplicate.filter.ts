@@ -37,6 +37,7 @@ export class DuplicateFilter extends BaseExceptionFilter {
         User_email_key: 'email',
         Blog_url_key: 'url',
         BlogCategory_url_key: 'url',
+        Seo_url_key: 'url',
       };
 
       const duplicatedField =

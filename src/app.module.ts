@@ -14,6 +14,7 @@ import { UserModule } from './user/user.module';
 import { DuplicateFilter } from './shared/filters/duplicate.filter';
 import { JwtModule } from '@nestjs/jwt';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { SeoModule } from './seo/seo.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     PrismaModule,
     BlogModule,
     UserModule,
+    SeoModule,
   ],
   controllers: [AppController],
   providers: [

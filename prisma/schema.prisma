@@ -20,11 +20,14 @@ model Blog {
   image      String
   url        String       @unique
   categoryId String
-  category   BlogCategory @relation(fields: [categoryId], references: [id])
+  category   BlogCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   userId     String
   user       User         @relation(fields: [userId], references: [id])
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+
+  @@index([categoryId])
+  @@index([userId])
 }
 
 model BlogCategory {
@@ -54,6 +57,9 @@ model Log {
   userId    String?
   user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
 }
 
 enum Role {
@@ -86,4 +92,32 @@ model Seo {
   content        String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Product {
+  id         String          @id @default(uuid())
+  title      String
+  content    String
+  images     String[]
+  thumbnail  String
+  price      Decimal         @db.Decimal(10, 2)
+  discount   Decimal?        @db.Decimal(10, 2)
+  categoryId String
+  category   ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  url        String          @unique
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  @@index([categoryId])
+}
+
+model ProductCategory {
+  id        String    @id @default(uuid())
+  title     String
+  content   String
+  image     String
+  url       String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

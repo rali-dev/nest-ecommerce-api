@@ -56,7 +56,12 @@ export const saveImages = async (
   return fileNames;
 };
 
+const isSafeName = (name: string) => !/[\\/]/.test(name) && name !== '..';
 export const deleteImage = async (fileName: string, folder: string = '') => {
+  if (!isSafeName(fileName) || !isSafeName(folder)) {
+    console.warn('Invalid file or folder name:', folder, fileName);
+    return;
+  }
 
   const imagePath = './files/' + folder;
 

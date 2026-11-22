@@ -11,12 +11,27 @@ export enum UserSort {
   UpdatedAt = 'updatedAt',
   CreatedAt = 'createdAt',
 }
+
+export enum ProductSort {
+  Title = 'title',
+  Cheap = 'cheap',
+  Expensive = 'expensive',
+  UpdatedAt = 'updatedAt',
+  CreatedAt = 'createdAt',
+}
+
+export enum ProductCategorySort {
+  Title = 'title',
+  UpdatedAt = 'updatedAt',
+  CreatedAt = 'createdAt',
+}
+
 export class GeneralQueryDto {
   @IsOptional()
   @IsInt()
   @IsPositive()
   page?: number;
-  
+
   @IsOptional()
   @IsInt()
   @IsPositive()

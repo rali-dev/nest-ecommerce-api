@@ -16,16 +16,23 @@ export class LogInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(async (response) => {
-        if (request.method !== 'GET') {
+        const type = LogType[request.method];
+        if (!type) {
+          return;
+        }
+
+        try {
           await this.appService.log({
             content:
               response === undefined
                 ? 'No response body'
                 : JSON.stringify(response),
             url: request.url,
-            type: LogType[request.method],
+            type,
             userId: request['user']?.id || null,
           });
+        } catch (error) {
+          console.error('Could not save log:', error);
         }
       }),
     );

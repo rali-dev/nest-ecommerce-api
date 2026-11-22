@@ -101,7 +101,7 @@ export class BlogService {
       data: body,
     });
 
-    if (body?.image) {
+    if (body?.image && body.image !== blog.image) {
       await deleteImage(blog.image, 'blog');
     }
 

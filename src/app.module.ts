@@ -15,6 +15,7 @@ import { DuplicateFilter } from './shared/filters/duplicate.filter';
 import { JwtModule } from '@nestjs/jwt';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { SeoModule } from './seo/seo.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { SeoModule } from './seo/seo.module';
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'file'),
+      rootPath: join(__dirname, '..', 'files'),
       serveRoot: '/file',
     }),
     JwtModule.register({
@@ -39,6 +40,7 @@ import { SeoModule } from './seo/seo.module';
     BlogModule,
     UserModule,
     SeoModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [
@@ -58,7 +60,7 @@ import { SeoModule } from './seo/seo.module';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
-    }
+    },
   ],
 })
 export class AppModule implements NestModule {

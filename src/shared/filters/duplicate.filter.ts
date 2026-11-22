@@ -38,6 +38,8 @@ export class DuplicateFilter extends BaseExceptionFilter {
         Blog_url_key: 'url',
         BlogCategory_url_key: 'url',
         Seo_url_key: 'url',
+        Product_url_key: 'url',
+        ProductCategory_url_key: 'url',
       };
 
       const duplicatedField =
@@ -48,6 +50,16 @@ export class DuplicateFilter extends BaseExceptionFilter {
         message: duplicatedField
           ? `${duplicatedField} already exists`
           : 'A record with this value already exists',
+      });
+      return;
+    }
+
+    if (exception.code === 'P2003') {
+      const response = host.switchToHttp().getResponse<Response>();
+
+      response.status(409).json({
+        statusCode: 409,
+        message: 'The related record does not exist or is still in use',
       });
       return;
     }

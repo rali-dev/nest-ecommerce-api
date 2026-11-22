@@ -72,7 +72,7 @@ export class BlogCategoryService {
       data: body,
     });
 
-    if (body?.image) {
+    if (body?.image && body.image !== blogCategory.image) {
       await deleteImage(blogCategory.image, 'blog-category');
     }
 

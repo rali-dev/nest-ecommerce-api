@@ -19,6 +19,7 @@ import { RoleGuard } from '../../shared/guards/role.guard';
 import { Role } from '../../generated/prisma/client';
 import { UrlPipe } from '../../shared/pipes/url.pipe';
 import { BodyIdPipe } from '../../shared/pipes/body-id.pipe';
+import { ReservedUrlPipe } from '../../shared/pipes/reserved-url.pipe';
 
 @ApiTags('Product')
 @Controller('product')
@@ -32,7 +33,14 @@ export class ProductController {
   }
 
   @Post()
-  create(@Body(UrlPipe, new BodyIdPipe(['categoryId'])) body: ProductDto) {
+  create(
+    @Body(
+      UrlPipe,
+      new ReservedUrlPipe(['categories']),
+      new BodyIdPipe(['categoryId']),
+    )
+    body: ProductDto,
+  ) {
     return this.productService.create(body);
   }
 
@@ -44,7 +52,12 @@ export class ProductController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body(UrlPipe, new BodyIdPipe(['categoryId'])) body: UpdateProductDto,
+    @Body(
+      UrlPipe,
+      new ReservedUrlPipe(['categories']),
+      new BodyIdPipe(['categoryId']),
+    )
+    body: UpdateProductDto,
   ) {
     return this.productService.update(id, body);
   }

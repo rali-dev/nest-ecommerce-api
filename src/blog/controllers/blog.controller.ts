@@ -20,6 +20,7 @@ import { RoleGuard } from '../../shared/guards/role.guard';
 import { Role } from '../../generated/prisma/client.js';
 import { UrlPipe } from '../../shared/pipes/url.pipe';
 import { BodyIdPipe } from '../../shared/pipes/body-id.pipe';
+import { ReservedUrlPipe } from '../../shared/pipes/reserved-url.pipe';
 
 // @ApiHeader({
 //   name: 'apikey',
@@ -43,7 +44,12 @@ export class BlogController {
 
   @Post()
   create(
-    @Body(UrlPipe, new BodyIdPipe(['categoryId'])) body: BlogDto,
+    @Body(
+      UrlPipe,
+      new ReservedUrlPipe(['categories']),
+      new BodyIdPipe(['categoryId']),
+    )
+    body: BlogDto,
     @UserId() userId: string,
   ) {
     return this.blogService.create(body, userId);
@@ -52,7 +58,12 @@ export class BlogController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body(UrlPipe, new BodyIdPipe(['categoryId'])) body: UpdateBlogDto,
+    @Body(
+      UrlPipe,
+      new ReservedUrlPipe(['categories']),
+      new BodyIdPipe(['categoryId']),
+    )
+    body: UpdateBlogDto,
   ) {
     return this.blogService.update(id, body);
   }

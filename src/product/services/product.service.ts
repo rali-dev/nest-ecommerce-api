@@ -108,21 +108,19 @@ export class ProductService {
   }
 
   async update(id: string, body: UpdateProductDto): Promise<Product> {
-    const product = await this.findOne(id, { images: true });
+    const product = await this.findOne(id, { images: true, thumbnail: true });
 
     const updatedProduct = await this.prismaService.product.update({
       where: { id },
       data: body,
     });
 
-    if (body.images) {
-      for (const image of product.images) {
-        if (
-          !body.images.includes(image) &&
-          image !== updatedProduct.thumbnail
-        ) {
-          await deleteImage(image, 'product');
-        }
+    const oldFiles = new Set([...product.images, product.thumbnail]);
+    const newFiles = [...updatedProduct.images, updatedProduct.thumbnail];
+
+    for (const file of oldFiles) {
+      if (!newFiles.includes(file)) {
+        await deleteImage(file, 'product');
       }
     }
 
@@ -130,7 +128,7 @@ export class ProductService {
   }
 
   async delete(id: string): Promise<Product> {
-    const product = await this.findOne(id, { images: true });
+    const product = await this.findOne(id, { images: true, thumbnail: true });
 
     const deletedProduct = await this.prismaService.product.delete({
       where: { id },
@@ -138,6 +136,10 @@ export class ProductService {
 
     for (const image of product.images) {
       await deleteImage(image, 'product');
+    }
+
+    if (!product.images.includes(product.thumbnail)) {
+      await deleteImage(product.thumbnail, 'product');
     }
 
     return deletedProduct;

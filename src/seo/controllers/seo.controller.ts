@@ -12,12 +12,12 @@ import {
 import { SeoService } from '../services/seo.service';
 import { SeoQueryDto } from '../dtos/seo-query.dto';
 import { SeoDto } from '../dtos/seo.dto';
-import { UrlPipe } from '../../shared/pipes/url.pipe';
 import { UpdateSeoDto } from '../dtos/update-seo.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../../shared/guards/jwt.guard';
 import { RoleGuard } from '../../shared/guards/role.guard';
 import { Role } from '../../generated/prisma/client';
+import { SeoUrlPipe } from '../../shared/pipes/seo-url.pipe';
 
 @ApiTags('Seo')
 @Controller('seo')
@@ -37,12 +37,12 @@ export class SeoController {
   }
 
   @Post()
-  create(@Body(UrlPipe) body: SeoDto) {
+  create(@Body(SeoUrlPipe) body: SeoDto) {
     return this.seoService.create(body);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body(UrlPipe) body: UpdateSeoDto) {
+  update(@Param('id') id: string, @Body(SeoUrlPipe) body: UpdateSeoDto) {
     return this.seoService.update(id, body);
   }
 

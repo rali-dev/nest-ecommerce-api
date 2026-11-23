@@ -1,4 +1,6 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { BlogCategoryDto } from "./blog-category.dto";
+import { PartialType } from '@nestjs/mapped-types';
+import { BlogCategoryDto } from './blog-category.dto';
 
-export class UpdateBlogCategoryDto extends PartialType(BlogCategoryDto){}
+export class UpdateBlogCategoryDto extends PartialType(BlogCategoryDto, {
+  skipNullProperties: false,
+}) {}

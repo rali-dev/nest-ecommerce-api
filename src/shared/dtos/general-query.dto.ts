@@ -1,4 +1,4 @@
-import { IsOptional, IsPositive, IsInt } from 'class-validator';
+import { IsOptional, IsPositive, IsInt, Max } from 'class-validator';
 
 export enum BlogSort {
   Title = 'title',
@@ -30,10 +30,12 @@ export class GeneralQueryDto {
   @IsOptional()
   @IsInt()
   @IsPositive()
+  @Max(100000)
   page?: number;
 
   @IsOptional()
   @IsInt()
   @IsPositive()
+  @Max(100)
   limit?: number;
 }

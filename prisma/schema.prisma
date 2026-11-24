@@ -69,18 +69,19 @@ enum Role {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  firstName     String
-  lastName      String
-  mobile        String
-  email         String   @unique
-  password      String
-  role          Role     @default(USER)
-  logs          Log[]
-  blogs         Blog[]
-  twoFactorCode String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                 String    @id @default(uuid())
+  firstName          String
+  lastName           String
+  mobile             String
+  email              String    @unique
+  password           String
+  role               Role      @default(USER)
+  logs               Log[]
+  blogs              Blog[]
+  twoFactorCode      String?
+  twoFactorExpiresAt DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
 model Seo {

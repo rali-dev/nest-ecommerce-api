@@ -17,6 +17,8 @@ import { JwtService } from '@nestjs/jwt';
 import { randomInt } from 'node:crypto';
 import { ConfirmDto } from '../dtos/confirm.dto';
 
+const TWO_FACTOR_CODE_TTL_MS = 5 * 60 * 1000;
+
 @Injectable()
 export class UserService {
   constructor(
@@ -126,18 +128,27 @@ export class UserService {
   async confirm(body: ConfirmDto) {
     const { email, twoFactorCode } = body;
     const user = await this.findOneByEmail(email);
-    if (!user || !user.twoFactorCode) {
+    if (!user || !user.twoFactorCode || !user.twoFactorExpiresAt) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    if (user.twoFactorExpiresAt < new Date()) {
+      throw new UnauthorizedException('Two factor code has expired');
     }
 
     const isTwoFactorCodeCorrect = await bcrypt.compare(
       twoFactorCode,
       user.twoFactorCode,
     );
+
     if (!isTwoFactorCodeCorrect) {
       throw new UnauthorizedException('Invalid two factor code');
     } else {
-      const payload = { sub: user.id, role: user.role};
+      await this.prismaService.user.update({
+        where: { id: user.id },
+        data: { twoFactorCode: null, twoFactorExpiresAt: null },
+      });
+      const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload);
       return accessToken;
     }
@@ -152,12 +163,11 @@ export class UserService {
     const twoFactorCode = randomInt(100000, 1000000).toString(); // 6 digits
     const salt = await bcrypt.genSalt();
     const hashedCode = await bcrypt.hash(twoFactorCode, salt);
-
-    user.twoFactorCode = hashedCode;
+    const twoFactorExpiresAt = new Date(Date.now() + TWO_FACTOR_CODE_TTL_MS);
 
     await this.prismaService.user.update({
       where: { id: user.id },
-      data: { twoFactorCode: hashedCode },
+      data: { twoFactorCode: hashedCode, twoFactorExpiresAt },
     });
 
     // TODO: send the code by email with nodemailer instead
